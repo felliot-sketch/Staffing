@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theoria Medical — Staffing Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&family=Roboto+Slab:wght@700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F2F0EB;
+  --surface: #FAFAF8;
+  --surface-raised: #FFFFFF;
+  --border: #DDD9D0;
+  --border-strong: #C4BFB3;
+  --ink: #1C1A17;
+  --ink-2: #6A6660;
+  --ink-3: #9E9A94;
+  --red: #B83232;
+  --red-bg: #FBF0F0;
+  --red-border: #EEC8C8;
+  --amber: #C47D0A;
+  --amber-bg: #FDF5E6;
+  --amber-border: #EDD38A;
+  --orange: #B85E0D;
+  --orange-bg: #FDF2E8;
+  --orange-border: #EDCA9A;
+  --green: #1A6640;
+  --green-bg: #EBF5EF;
+  --green-border: #9ED4B8;
+  --blue: #1B4E8A;
+  --blue-bg: #EBF1FA;
+  --blue-border: #9DBDE8;
+  --slate: #3A5066;
+  --radius: 8px;
+  --radius-sm: 5px;
+  --shadow: 0 1px 4px rgba(28,26,23,0.07), 0 0 0 1px rgba(28,26,23,0.05);
+  --shadow-md: 0 4px 16px rgba(28,26,23,0.09), 0 0 0 1px rgba(28,26,23,0.06);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* NAV */
+.topnav {
+  background: #0D2D6B;
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 48px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-logo {
+  font-family: 'Roboto Slab', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-right: 10px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-logo-divider {
+  width: 1px;
+  height: 14px;
+  background: rgba(255,255,255,0.3);
+}
+.nav-logo-sub {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  font-style: normal;
+}
+.nav-logo span { font-style: normal; color: #FFFFFF; }
+.nav-badge {
+  background: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.7);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  margin-left: 10px;
+  letter-spacing: 0.08em;
+}
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: rgba(250,250,248,0.5);
+  flex: 1;
+}
+.breadcrumb .crumb {
+  cursor: pointer;
+  color: rgba(250,250,248,0.6);
+  transition: color 0.15s;
+}
+.breadcrumb .crumb:hover { color: #FAFAF8; }
+.breadcrumb .crumb.active { color: #FAFAF8; font-weight: 500; cursor: default; }
+.breadcrumb .sep { opacity: 0.3; }
+.nav-week {
+  font-size: 11px;
+  color: rgba(250,250,248,0.45);
+  font-family: 'IBM Plex Mono', monospace;
+  flex-shrink: 0;
+}
+
+/* VIEWS */
+.view { display: none; animation: fadeIn 0.2s ease; }
+.view.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+.page-wrap { max-width: 1240px; margin: 0 auto; padding: 32px 28px 64px; }
+
+/* SECTION HEADER */
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.section-title {
+  font-family: 'Fraunces', serif;
+  font-size: 26px;
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.section-subtitle {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-top: 3px;
+}
+
+/* METRIC CARDS */
+.metric-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.metric-card {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+}
+.metric-label {
+  font-size: 11px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+.metric-value {
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1;
+}
+.metric-value.red { color: var(--red); }
+.metric-value.amber { color: var(--amber); }
+.metric-value.green { color: var(--green); }
+.metric-sub {
+  font-size: 11px;
+  color: var(--ink-3);
+  margin-top: 5px;
+}
+
+/* TABS */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+.tab {
+  padding: 9px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-3);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.15s;
+}
+.tab:hover { color: var(--ink); }
+.tab.active { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* POD CARDS */
+.pods-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+}
+.pod-card {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.15s, border-color 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+.pod-card:hover { box-shadow: var(--shadow-md); border-color: var(--border-strong); }
+.pod-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.pod-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.pod-rdo {
+  font-size: 11px;
+  color: var(--ink-3);
+  margin-top: 2px;
+}
+.risk-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+.badge-critical { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+.badge-high { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-border); }
+.badge-elevated { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.badge-stable { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.badge-watch { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
+
+.pod-stats {
+  display: flex;
+  gap: 20px;
+}
+.pod-stat { }
+.pod-stat-val {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1;
+}
+.pod-stat-val.red { color: var(--red); }
+.pod-stat-val.amber { color: var(--amber); }
+.pod-stat-lbl {
+  font-size: 10px;
+  color: var(--ink-3);
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.pod-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.pod-ci-bar {
+  flex: 1;
+  margin-right: 14px;
+}
+.pod-ci-label {
+  font-size: 10px;
+  color: var(--ink-3);
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+.pod-ci-track {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  position: relative;
+  overflow: visible;
+}
+.pod-ci-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--green);
+}
+.pod-ci-fill.amber { background: var(--amber); }
+.pod-ci-fill.red { background: var(--red); }
+.pod-arrow {
+  font-size: 11px;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+
+/* FACILITY LIST */
+.facility-filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.filter-select {
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--ink);
+  cursor: pointer;
+  outline: none;
+}
+.filter-select:focus { border-color: var(--ink); }
+.filter-search {
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--ink);
+  outline: none;
+  flex: 1;
+  min-width: 160px;
+}
+.filter-search:focus { border-color: var(--ink); }
+.filter-search::placeholder { color: var(--ink-3); }
+.btn-reset {
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-reset:hover { border-color: var(--ink); color: var(--ink); }
+
+/* RISK TABLE */
+.risk-table-wrap {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+thead tr {
+  border-bottom: 1px solid var(--border);
+}
+th {
+  padding: 10px 14px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+th:hover { color: var(--ink); }
+th .sort-icon { margin-left: 3px; opacity: 0.4; }
+th.sorted .sort-icon { opacity: 1; }
+tbody tr {
+  border-bottom: 1px solid var(--bg);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+tbody tr:hover { background: var(--bg); }
+tbody tr:last-child { border-bottom: none; }
+td {
+  padding: 11px 14px;
+  font-size: 12px;
+  color: var(--ink);
+  vertical-align: middle;
+}
+.rank-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+.fac-name { font-weight: 500; }
+.fac-rdo { font-size: 11px; color: var(--ink-3); margin-top: 1px; }
+.score-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.score-bar-track {
+  width: 60px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.score-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+}
+.score-bar-fill.critical { background: var(--red); }
+.score-bar-fill.high { background: var(--orange); }
+.score-bar-fill.elevated { background: var(--amber); }
+.score-bar-fill.lowrisk { background: var(--blue); }
+.score-bar-fill.stable { background: var(--green); }
+.score-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+}
+.score-val.critical { color: var(--red); }
+.score-val.high { color: var(--orange); }
+.score-val.elevated { color: var(--amber); }
+.score-val.lowrisk { color: var(--blue); }
+.score-val.stable { color: var(--green); }
+.trend-up { color: var(--red); }
+.trend-stable { color: var(--ink-3); }
+.trend-down { color: var(--green); }
+.driver-tag {
+  font-size: 10px;
+  background: var(--amber-bg);
+  color: var(--amber);
+  border: 1px solid var(--amber-border);
+  padding: 2px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.driver-tag.red { background: var(--red-bg); color: var(--red); border-color: var(--red-border); }
+.action-text { font-size: 11px; color: var(--ink-2); max-width: 200px; }
+
+/* FACILITY DETAIL */
+.detail-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+.detail-card {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+}
+.detail-card .metric-label { font-size: 10px; margin-bottom: 4px; }
+.detail-card .metric-value { font-size: 26px; }
+
+.section-block {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+.block-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.block-subtitle { font-size: 11px; color: var(--ink-3); font-weight: 400; text-transform: none; letter-spacing: 0; }
+
+/* PTO GRID */
+.pto-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+.pto-day {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 8px;
+  text-align: center;
+}
+.pto-day.red { background: var(--red-bg); border-color: var(--red-border); }
+.pto-day.amber { background: var(--amber-bg); border-color: var(--amber-border); }
+.pto-day.ok { background: var(--green-bg); border-color: var(--green-border); }
+.pto-day-name {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+.pto-day-count {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1;
+}
+.pto-day.red .pto-day-count { color: var(--red); }
+.pto-day.amber .pto-day-count { color: var(--amber); }
+.pto-day.ok .pto-day-count { color: var(--green); }
+.pto-day-label {
+  font-size: 10px;
+  margin-top: 4px;
+}
+.pto-day.red .pto-day-label { color: var(--red); }
+.pto-day.amber .pto-day-label { color: var(--amber); }
+.pto-day.ok .pto-day-label { color: var(--green); }
+
+/* PACING */
+.pacing-table { width: 100%; }
+.pacing-row {
+  display: grid;
+  grid-template-columns: 180px 80px 80px 80px 1fr 60px;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--bg);
+}
+.pacing-row:last-child { border-bottom: none; }
+.pacing-row.header { font-size: 10px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.pacing-name { font-size: 12px; font-weight: 500; }
+.pacing-name.out::after { content: 'OUT'; font-size: 9px; background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); padding: 1px 4px; border-radius: 3px; margin-left: 6px; font-weight: 600; vertical-align: middle; }
+.pacing-num { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--ink-2); }
+.pacing-bar-track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.pacing-bar-fill { height: 100%; border-radius: 3px; }
+.pacing-bar-fill.green { background: var(--green); }
+.pacing-bar-fill.amber { background: var(--amber); }
+.pacing-bar-fill.orange { background: var(--orange); }
+.pacing-bar-fill.red { background: var(--red); }
+.pacing-pct { font-size: 11px; font-family: 'IBM Plex Mono', monospace; }
+.pacing-pct.green { color: var(--green); }
+.pacing-pct.amber { color: var(--amber); }
+.pacing-pct.orange { color: var(--orange); }
+.pacing-pct.red { color: var(--red); }
+
+/* COHORT + TENURE FLAGS */
+.flag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+.flag-pill {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+}
+.flag-pill.cohort-c { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+.flag-pill.cohort-b { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.flag-pill.cohort-d { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-border); }
+.flag-pill.cohort-x { background: #F5EBF5; color: #7A3A8A; border: 1px solid #D4ADD4; }
+.flag-pill.cohort-a { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.flag-pill.cohort-aa { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.flag-pill.tenure-high { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+.flag-pill.tenure-elevated { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.flag-pill.tenure-low { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.flag-pill.dow-mon { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+.flag-pill.dow-fri { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+
+/* PRN RINGS */
+.prn-rings {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.prn-ring {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+}
+.prn-ring.danger { background: var(--red-bg); border-color: var(--red-border); }
+.prn-ring-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.prn-ring-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.prn-ring-count {
+  font-size: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--ink-2);
+}
+.prn-no-coverage {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--red);
+  font-size: 11px;
+  font-weight: 600;
+}
+.prn-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.prn-names { }
+.prn-name {
+  font-size: 11px;
+  color: var(--ink-2);
+  padding: 2px 0;
+  display: block;
+}
+.prn-more { font-size: 10px; color: var(--ink-3); margin-top: 4px; }
+
+/* RISK SCORE BLOCK */
+.risk-score-card {
+  background: #0D2D6B;
+  color: #FAFAF8;
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  margin-bottom: 16px;
+}
+.risk-score-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.risk-score-num {
+  font-size: 52px;
+  font-weight: 600;
+  line-height: 1;
+}
+.risk-score-tier {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+.risk-score-rec {
+  font-size: 12px;
+  opacity: 0.75;
+  max-width: 260px;
+  text-align: right;
+  line-height: 1.5;
+}
+.risk-sub-scores {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.risk-sub {
+  background: rgba(255,255,255,0.07);
+  border-radius: 6px;
+  padding: 12px 14px;
+}
+.risk-sub-label { font-size: 10px; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
+.risk-sub-val { font-size: 24px; font-weight: 600; line-height: 1; }
+.risk-sub-weight { font-size: 10px; opacity: 0.5; margin-top: 2px; }
+
+/* MATRIX VIEW */
+.matrix-container {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+.matrix-grid {
+  display: grid;
+  grid-template-columns: 48px 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 40px;
+  gap: 0;
+  height: 340px;
+  margin-top: 12px;
+}
+.matrix-cell {
+  border: 1px solid var(--border);
+  padding: 8px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.matrix-cell.critical-zone { background: #FFF5F5; }
+.matrix-cell.urgent-zone { background: #FFF8EE; }
+.matrix-cell.watch-zone { background: #FFFBEE; }
+.matrix-cell.stable-zone { background: #F5FBF7; }
+.matrix-dot {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--red);
+  color: white;
+  font-size: 9px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.15s;
+}
+.matrix-dot:hover { transform: scale(1.2); z-index: 10; }
+.matrix-dot.critical { background: var(--red); }
+.matrix-dot.high { background: var(--orange); }
+.matrix-dot.elevated { background: var(--amber); }
+.matrix-dot.lowrisk { background: var(--blue); }
+.matrix-axis-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.matrix-y-labels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+.matrix-y-label {
+  font-size: 9px;
+  color: var(--ink-3);
+  text-align: right;
+  padding-right: 8px;
+}
+
+/* FACILITY CARDS (pod detail) */
+.facility-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.facility-card {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.15s, border-color 0.15s;
+  display: grid;
+  grid-template-columns: 1fr auto auto auto auto auto;
+  gap: 16px;
+  align-items: center;
+}
+.facility-card:hover { box-shadow: var(--shadow-md); border-color: var(--border-strong); }
+.facility-card-name { font-weight: 500; font-size: 13px; }
+.facility-card-sub { font-size: 11px; color: var(--ink-3); margin-top: 1px; }
+.fac-stat { text-align: center; }
+.fac-stat-val { font-size: 16px; font-weight: 600; }
+.fac-stat-val.red { color: var(--red); }
+.fac-stat-val.amber { color: var(--amber); }
+.fac-stat-lbl { font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* ALERT STRIP */
+.alert-strip {
+  background: var(--red-bg);
+  border: 1px solid var(--red-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: var(--red);
+  font-weight: 500;
+}
+.alert-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+
+/* CI STRIP */
+.ci-strip {
+  background: var(--blue-bg);
+  border: 1px solid var(--blue-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  font-size: 11px;
+}
+.ci-strip-label { color: var(--blue); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; font-size: 10px; flex-shrink: 0; }
+.ci-strip-val { font-family: 'IBM Plex Mono', monospace; color: var(--blue); font-size: 12px; }
+.ci-strip-text { color: var(--ink-2); flex: 1; }
+
+/* RISK FACTORS PANEL */
+.risk-factors-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+.risk-factor-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  text-align: center;
+}
+.rf-label { font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+.rf-val { font-size: 18px; font-weight: 600; }
+.rf-weight { font-size: 10px; color: var(--ink-3); margin-top: 3px; }
+
+/* BACK BTN */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--ink-3);
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: color 0.15s;
+}
+.back-btn:hover { color: var(--ink); }
+
+/* TOOLTIP */
+.tooltip {
+  position: absolute;
+  background: var(--ink);
+  color: #FAFAF8;
+  font-size: 11px;
+  padding: 6px 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 200;
+  display: none;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .metric-row { grid-template-columns: repeat(2, 1fr); }
+  .detail-grid { grid-template-columns: repeat(2, 1fr); }
+  .risk-factors-grid { grid-template-columns: repeat(3, 1fr); }
+  .prn-rings { grid-template-columns: 1fr; }
+  .facility-card { grid-template-columns: 1fr auto auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <div class="nav-logo">THEORIA <span class="nav-logo-sub">Medical</span> <span class="nav-badge">STAFFING INTEL</span></div>
+  <div class="breadcrumb" id="breadcrumb">
+    <span class="crumb active" onclick="goTo('overview')">Pod Overview</span>
+  </div>
+  <div class="nav-week">Week of Apr 7, 2026</div>
+</nav>
+
+<!-- TOOLTIP -->
+<div class="tooltip" id="tooltip"></div>
+
+<!-- VIEW: OVERVIEW -->
+<div class="view active" id="view-overview">
+<div class="page-wrap">
+  <div class="section-header">
+    <div>
+      <div class="section-title">Staffing Intelligence</div>
+      <div class="section-subtitle">All pods · RDO view · Week of Apr 7, 2026</div>
+    </div>
+  </div>
+
+  <div class="metric-row">
+    <div class="metric-card">
+      <div class="metric-label">Total Active Providers</div>
+      <div class="metric-value">284</div>
+      <div class="metric-sub">Across 8 regions</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">On PTO This Week</div>
+      <div class="metric-value amber">33</div>
+      <div class="metric-sub">11.6% of total</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Pods at Critical / High Risk</div>
+      <div class="metric-value red">3</div>
+      <div class="metric-sub">Southeast, MI West, Frontier</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Facilities Flagged</div>
+      <div class="metric-value">47</div>
+      <div class="metric-sub">Tier 1–3 across all pods</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('pods')">Pod View</div>
+    <div class="tab" onclick="switchTab('table')">Risk Table — All Facilities</div>
+    <div class="tab" onclick="switchTab('matrix')">Risk Matrix</div>
+  </div>
+
+  <!-- POD CARDS -->
+  <div id="tab-pods" class="pods-grid">
+
+    <div class="pod-card" onclick="goToPod('southeast')">
+      <div class="pod-card-header">
+        <div>
+          <div class="pod-name">Kaline Remillard</div>
+          <div class="pod-rdo">Southeast · 28 facilities</div>
+        </div>
+        <div class="risk-badge badge-critical">Critical</div>
+      </div>
+      <div class="pod-stats">
+        <div class="pod-stat">
+          <div class="pod-stat-val red">7</div>
+          <div class="pod-stat-lbl">On PTO</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">33</div>
+          <div class="pod-stat-lbl">Active</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">25.1</div>
+          <div class="pod-stat-lbl">Target FTE</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val red">0.9</div>
+          <div class="pod-stat-lbl">vs Target</div>
+        </div>
+      </div>
+      <div class="pod-card-footer">
+        <div class="pod-ci-bar">
+          <div class="pod-ci-label"><span>Coverage Exposure</span></div>
+          <div class="pod-ci-track"><div class="pod-ci-fill red" style="width:72%"></div></div>
+        </div>
+        <div class="pod-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="pod-card" onclick="goToPod('miwest')">
+      <div class="pod-card-header">
+        <div>
+          <div class="pod-name">Heather DiCesare</div>
+          <div class="pod-rdo">MI West · 22 facilities</div>
+        </div>
+        <div class="risk-badge badge-high">High Risk</div>
+      </div>
+      <div class="pod-stats">
+        <div class="pod-stat">
+          <div class="pod-stat-val amber">4</div>
+          <div class="pod-stat-lbl">On PTO</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">41</div>
+          <div class="pod-stat-lbl">Active</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">35.3</div>
+          <div class="pod-stat-lbl">Target FTE</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val amber">1.7</div>
+          <div class="pod-stat-lbl">vs Target</div>
+        </div>
+      </div>
+      <div class="pod-card-footer">
+        <div class="pod-ci-bar">
+          <div class="pod-ci-label"><span>Coverage Exposure</span></div>
+          <div class="pod-ci-track"><div class="pod-ci-fill amber" style="width:55%"></div></div>
+        </div>
+        <div class="pod-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="pod-card" onclick="goToPod('mieast')">
+      <div class="pod-card-header">
+        <div>
+          <div class="pod-name">Kara Palazzolo</div>
+          <div class="pod-rdo">MI East · 26 facilities</div>
+        </div>
+        <div class="risk-badge badge-elevated">Elevated</div>
+      </div>
+      <div class="pod-stats">
+        <div class="pod-stat">
+          <div class="pod-stat-val">5</div>
+          <div class="pod-stat-lbl">On PTO</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">59</div>
+          <div class="pod-stat-lbl">Active</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">50.8</div>
+          <div class="pod-stat-lbl">Target FTE</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">3.2</div>
+          <div class="pod-stat-lbl">vs Target</div>
+        </div>
+      </div>
+      <div class="pod-card-footer">
+        <div class="pod-ci-bar">
+          <div class="pod-ci-label"><span>Coverage Exposure</span></div>
+          <div class="pod-ci-track"><div class="pod-ci-fill amber" style="width:48%"></div></div>
+        </div>
+        <div class="pod-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="pod-card" onclick="goToPod('greatlakes')">
+      <div class="pod-card-header">
+        <div>
+          <div class="pod-name">Christina O'Brien</div>
+          <div class="pod-rdo">Great Lakes · 31 facilities</div>
+        </div>
+        <div class="risk-badge badge-elevated">Elevated</div>
+      </div>
+      <div class="pod-stats">
+        <div class="pod-stat">
+          <div class="pod-stat-val">6</div>
+          <div class="pod-stat-lbl">On PTO</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">37</div>
+          <div class="pod-stat-lbl">Active</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">26.3</div>
+          <div class="pod-stat-lbl">Target FTE</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">4.7</div>
+          <div class="pod-stat-lbl">vs Target</div>
+        </div>
+      </div>
+      <div class="pod-card-footer">
+        <div class="pod-ci-bar">
+          <div class="pod-ci-label"><span>Coverage Exposure</span></div>
+          <div class="pod-ci-track"><div class="pod-ci-fill amber" style="width:52%"></div></div>
+        </div>
+        <div class="pod-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="pod-card" onclick="goToPod('steelbelt')">
+      <div class="pod-card-header">
+        <div>
+          <div class="pod-name">Carissa Morton</div>
+          <div class="pod-rdo">Steel Belt · 29 facilities</div>
+        </div>
+        <div class="risk-badge badge-watch">Watch</div>
+      </div>
+      <div class="pod-stats">
+        <div class="pod-stat">
+          <div class="pod-stat-val">4</div>
+          <div class="pod-stat-lbl">On PTO</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">37</div>
+          <div class="pod-stat-lbl">Active</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">29.4</div>
+          <div class="pod-stat-lbl">Target FTE</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">3.6</div>
+          <div class="pod-stat-lbl">vs Target</div>
+        </div>
+      </div>
+      <div class="pod-card-footer">
+        <div class="pod-ci-bar">
+          <div class="pod-ci-label"><span>Coverage Exposure</span></div>
+          <div class="pod-ci-track"><div class="pod-ci-fill amber" style="width:44%"></div></div>
+        </div>
+        <div class="pod-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="pod-card" onclick="goToPod('atlantic')">
+      <div class="pod-card-header">
+        <div>
+          <div class="pod-name">Julie Segars</div>
+          <div class="pod-rdo">Atlantic · 28 facilities</div>
+        </div>
+        <div class="risk-badge badge-stable">Stable</div>
+      </div>
+      <div class="pod-stats">
+        <div class="pod-stat">
+          <div class="pod-stat-val">3</div>
+          <div class="pod-stat-lbl">On PTO</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">41</div>
+          <div class="pod-stat-lbl">Active</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">29.3</div>
+          <div class="pod-stat-lbl">Target FTE</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">8.7</div>
+          <div class="pod-stat-lbl">vs Target</div>
+        </div>
+      </div>
+      <div class="pod-card-footer">
+        <div class="pod-ci-bar">
+          <div class="pod-ci-label"><span>Coverage Exposure</span></div>
+          <div class="pod-ci-track"><div class="pod-ci-fill green" style="width:36%"></div></div>
+        </div>
+        <div class="pod-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="pod-card" onclick="goToPod('heartland')">
+      <div class="pod-card-header">
+        <div>
+          <div class="pod-name">Levi Davis · Ron Moore</div>
+          <div class="pod-rdo">Heartland · 45 facilities</div>
+        </div>
+        <div class="risk-badge badge-watch">Watch</div>
+      </div>
+      <div class="pod-stats">
+        <div class="pod-stat">
+          <div class="pod-stat-val">2</div>
+          <div class="pod-stat-lbl">On PTO</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">21</div>
+          <div class="pod-stat-lbl">Active</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">12.0</div>
+          <div class="pod-stat-lbl">Target FTE</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">7.0</div>
+          <div class="pod-stat-lbl">vs Target</div>
+        </div>
+      </div>
+      <div class="pod-card-footer">
+        <div class="pod-ci-bar">
+          <div class="pod-ci-label"><span>Coverage Exposure</span></div>
+          <div class="pod-ci-track"><div class="pod-ci-fill amber" style="width:38%"></div></div>
+        </div>
+        <div class="pod-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="pod-card" onclick="goToPod('frontier')">
+      <div class="pod-card-header">
+        <div>
+          <div class="pod-name">Karlee McBride</div>
+          <div class="pod-rdo">Frontier · 18 facilities</div>
+        </div>
+        <div class="risk-badge badge-high">High Risk</div>
+      </div>
+      <div class="pod-stats">
+        <div class="pod-stat">
+          <div class="pod-stat-val amber">2</div>
+          <div class="pod-stat-lbl">On PTO</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">15</div>
+          <div class="pod-stat-lbl">Active</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val">16.7</div>
+          <div class="pod-stat-lbl">Target FTE</div>
+        </div>
+        <div class="pod-stat">
+          <div class="pod-stat-val red">(3.7)</div>
+          <div class="pod-stat-lbl">vs Target</div>
+        </div>
+      </div>
+      <div class="pod-card-footer">
+        <div class="pod-ci-bar">
+          <div class="pod-ci-label"><span>Coverage Exposure</span></div>
+          <div class="pod-ci-track"><div class="pod-ci-fill red" style="width:62%"></div></div>
+        </div>
+        <div class="pod-arrow">→</div>
+      </div>
+    </div>
+
+  </div><!-- end pods-grid -->
+
+  <!-- RISK TABLE TAB -->
+  <div id="tab-table" style="display:none;">
+    <div class="facility-filters">
+      <select class="filter-select" id="filter-rdo" onchange="filterTable()">
+        <option value="">All RDOs</option>
+        <option>Kaline Remillard</option>
+        <option>Heather DiCesare</option>
+        <option>Kara Palazzolo</option>
+        <option>Christina O'Brien</option>
+        <option>Carissa Morton</option>
+        <option>Julie Segars</option>
+        <option>Karlee McBride</option>
+        <option>Levi Davis</option>
+        <option>Ron Moore</option>
+      </select>
+      <select class="filter-select" id="filter-tier" onchange="filterTable()">
+        <option value="">All Tiers</option>
+        <option>Tier 1 — Critical</option>
+        <option>Tier 2 — High Risk</option>
+        <option>Tier 3 — Elevated</option>
+        <option>Tier 4 — Low Risk</option>
+        <option>Tier 5 — Stable</option>
+      </select>
+      <select class="filter-select" id="filter-region" onchange="filterTable()">
+        <option value="">All Regions</option>
+        <option>Southeast</option>
+        <option>MI West</option>
+        <option>MI East</option>
+        <option>Great Lakes</option>
+        <option>Steel Belt</option>
+        <option>Atlantic</option>
+        <option>Heartland</option>
+        <option>Frontier</option>
+      </select>
+      <input class="filter-search" id="filter-search" placeholder="Search facility name…" oninput="filterTable()">
+      <button class="btn-reset" onclick="resetFilters()">Reset</button>
+    </div>
+    <div class="risk-table-wrap">
+      <table id="risk-table">
+        <thead>
+          <tr>
+            <th onclick="sortTable(0)">Rank <span class="sort-icon">↕</span></th>
+            <th onclick="sortTable(1)">Facility <span class="sort-icon">↕</span></th>
+            <th onclick="sortTable(2)">Region <span class="sort-icon">↕</span></th>
+            <th onclick="sortTable(3)">RDO <span class="sort-icon">↕</span></th>
+            <th onclick="sortTable(4)">Vuln <span class="sort-icon">↕</span></th>
+            <th onclick="sortTable(5)">Consequence <span class="sort-icon">↕</span></th>
+            <th onclick="sortTable(6)">Score <span class="sort-icon">↕</span></th>
+            <th>Tier</th>
+            <th>Key Driver</th>
+            <th>Action</th>
+            <th>Trend</th>
+          </tr>
+        </thead>
+        <tbody id="risk-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MATRIX TAB -->
+  <div id="tab-matrix" style="display:none;">
+    <div class="matrix-container">
+      <div class="block-title">Risk Matrix — Top 10 Facilities <span class="block-subtitle">Coverage Exposure × Impact if Understaffed</span></div>
+      <div style="display:flex; gap:16px;">
+        <div style="writing-mode:vertical-lr; transform:rotate(180deg); font-size:10px; font-weight:600; color:var(--ink-3); text-transform:uppercase; letter-spacing:0.07em; text-align:center; padding: 8px 0;">Impact if Understaffed</div>
+        <div style="flex:1;">
+          <div style="display:grid; grid-template-columns: 48px 1fr 1fr 1fr; gap:0; margin-bottom:4px;">
+            <div></div>
+            <div style="text-align:center; font-size:10px; color:var(--ink-3); font-weight:600; text-transform:uppercase; letter-spacing:0.06em; padding:4px;">Low Exposure</div>
+            <div style="text-align:center; font-size:10px; color:var(--ink-3); font-weight:600; text-transform:uppercase; letter-spacing:0.06em; padding:4px;">Medium Exposure</div>
+            <div style="text-align:center; font-size:10px; color:var(--ink-3); font-weight:600; text-transform:uppercase; letter-spacing:0.06em; padding:4px;">High Exposure</div>
+          </div>
+          <div style="display:grid; grid-template-columns: 48px 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; gap:2px; height:280px;">
+            <div style="display:flex; flex-direction:column; justify-content:space-around; padding-right:6px;">
+              <div style="font-size:9px; color:var(--ink-3); text-align:right;">HIGH</div>
+              <div style="font-size:9px; color:var(--ink-3); text-align:right;">MED</div>
+              <div style="font-size:9px; color:var(--ink-3); text-align:right;">LOW</div>
+            </div>
+            <!-- Row HIGH consequence -->
+            <div style="background:#FFF5F5; border:1px solid #EEC8C8; border-radius:4px; padding:8px; display:flex; flex-wrap:wrap; gap:4px; align-content:flex-start;">
+              <div class="matrix-dot elevated" title="Grayling Nursing">GR</div>
+            </div>
+            <div style="background:#FFF0EE; border:1px solid #EEC8C8; border-radius:4px; padding:8px; display:flex; flex-wrap:wrap; gap:4px; align-content:flex-start;">
+              <div class="matrix-dot critical" title="Tennessee Veterans">TV</div>
+              <div class="matrix-dot critical" title="Gallaway H&R">GA</div>
+            </div>
+            <div style="background:#FFF0EE; border:1px solid #EEC8C8; border-radius:4px; padding:8px; display:flex; flex-wrap:wrap; gap:4px; align-content:flex-start;">
+              <div class="matrix-dot critical" title="Regency at Troy">RT</div>
+              <div class="matrix-dot critical" title="Pinecrest Medical">PM</div>
+            </div>
+            <!-- Row MED consequence -->
+            <div style="background:#FFFBEE; border:1px solid #EDD38A; border-radius:4px; padding:8px; display:flex; flex-wrap:wrap; gap:4px; align-content:flex-start;">
+              <div class="matrix-dot lowrisk" title="Regency at Fremont">RF</div>
+            </div>
+            <div style="background:#FFF8EE; border:1px solid #EDD38A; border-radius:4px; padding:8px; display:flex; flex-wrap:wrap; gap:4px; align-content:flex-start;">
+              <div class="matrix-dot high" title="Coulterville Rehab">CR</div>
+              <div class="matrix-dot high" title="Meadow Brook MCF">MB</div>
+            </div>
+            <div style="background:#FFF8EE; border:1px solid #EDD38A; border-radius:4px; padding:8px; display:flex; flex-wrap:wrap; gap:4px; align-content:flex-start;">
+              <div class="matrix-dot high" title="Laurels of Bedford">LB</div>
+            </div>
+            <!-- Row LOW consequence -->
+            <div style="background:#F5FBF7; border:1px solid #9ED4B8; border-radius:4px; padding:8px; display:flex; flex-wrap:wrap; gap:4px; align-content:flex-start;">
+            </div>
+            <div style="background:#F5FBF7; border:1px solid #9ED4B8; border-radius:4px; padding:8px; display:flex; flex-wrap:wrap; gap:4px; align-content:flex-start;">
+              <div class="matrix-dot lowrisk" title="Harbor Post Acute">HP</div>
+            </div>
+            <div style="background:#FFFBEE; border:1px solid #EDD38A; border-radius:4px; padding:8px; display:flex; flex-wrap:wrap; gap:4px; align-content:flex-start;">
+              <div class="matrix-dot elevated" title="Autumnwood McBain">AM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:10px; color:var(--ink-3); margin-top:14px;">Hover dots for facility name. Plots top 10 highest-risk facilities only. Primary operational view is the Risk Table.</div>
+
+      <!-- LEGEND -->
+      <div style="margin-top:20px; padding-top:18px; border-top:1px solid var(--border); display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+
+        <div>
+          <div style="font-size:10px; font-weight:600; color:var(--ink-3); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:10px;">Dot Color — Risk Level</div>
+          <div style="display:flex; flex-direction:column; gap:7px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="width:12px; height:12px; border-radius:50%; background:var(--red); flex-shrink:0;"></div>
+              <div style="font-size:12px; color:var(--ink);"><strong>Critical</strong> — Immediate action required. RDO call today.</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="width:12px; height:12px; border-radius:50%; background:var(--orange); flex-shrink:0;"></div>
+              <div style="font-size:12px; color:var(--ink);"><strong>High Risk</strong> — Address within 48 hours. Confirm PRN backup.</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="width:12px; height:12px; border-radius:50%; background:var(--amber); flex-shrink:0;"></div>
+              <div style="font-size:12px; color:var(--ink);"><strong>Elevated</strong> — Monitor daily. Pre-schedule PRN if available.</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="width:12px; height:12px; border-radius:50%; background:var(--blue); flex-shrink:0;"></div>
+              <div style="font-size:12px; color:var(--ink);"><strong>Low Risk</strong> — Quarterly review. No immediate action needed.</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:10px; font-weight:600; color:var(--ink-3); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:10px;">How to Read This Chart</div>
+          <div style="display:flex; flex-direction:column; gap:7px;">
+            <div style="display:flex; align-items:flex-start; gap:10px;">
+              <div style="width:12px; height:12px; border-radius:2px; background:#FFF0EE; border:1px solid #EEC8C8; flex-shrink:0; margin-top:1px;"></div>
+              <div style="font-size:12px; color:var(--ink);"><strong>Top-right zone</strong> — High exposure AND high impact. Escalate immediately.</div>
+            </div>
+            <div style="display:flex; align-items:flex-start; gap:10px;">
+              <div style="width:12px; height:12px; border-radius:2px; background:#FFF8EE; border:1px solid #EDD38A; flex-shrink:0; margin-top:1px;"></div>
+              <div style="font-size:12px; color:var(--ink);"><strong>Middle zones</strong> — Either high exposure or high impact, but not both. Monitor closely.</div>
+            </div>
+            <div style="display:flex; align-items:flex-start; gap:10px;">
+              <div style="width:12px; height:12px; border-radius:2px; background:#F5FBF7; border:1px solid #9ED4B8; flex-shrink:0; margin-top:1px;"></div>
+              <div style="font-size:12px; color:var(--ink);"><strong>Bottom-left zone</strong> — Low exposure and low impact. Stable. No action required.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SCORING FACTORS -->
+      <div style="margin-top:20px; padding-top:18px; border-top:1px solid var(--border);">
+        <div style="font-size:10px; font-weight:600; color:var(--ink-3); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:14px;">What Goes Into the Score</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+
+          <div style="background:var(--bg); border-radius:var(--radius-sm); padding:14px 16px;">
+            <div style="font-size:11px; font-weight:600; color:var(--ink); margin-bottom:8px;">Coverage Exposure <span style="font-size:10px; color:var(--ink-3); font-weight:400;">(horizontal axis · 55% of score)</span></div>
+            <div style="display:flex; flex-direction:column; gap:5px;">
+              <div style="font-size:11px; color:var(--ink-2); display:flex; justify-content:space-between;"><span>PRN availability within 10 miles</span><span style="font-family:'IBM Plex Mono',monospace; color:var(--ink-3);">High weight</span></div>
+              <div style="font-size:11px; color:var(--ink-2); display:flex; justify-content:space-between;"><span>PTO shifts this week vs. active providers</span><span style="font-family:'IBM Plex Mono',monospace; color:var(--ink-3);">High weight</span></div>
+              <div style="font-size:11px; color:var(--ink-2); display:flex; justify-content:space-between;"><span>Provider short-notice PTO history (90 days)</span><span style="font-family:'IBM Plex Mono',monospace; color:var(--ink-3);">Medium</span></div>
+              <div style="font-size:11px; color:var(--ink-2); display:flex; justify-content:space-between;"><span>Tenure band — newer providers call off more</span><span style="font-family:'IBM Plex Mono',monospace; color:var(--ink-3);">Medium</span></div>
+              <div style="font-size:11px; color:var(--ink-2); display:flex; justify-content:space-between;"><span>Productivity cohort — Cohort C/X flag</span><span style="font-family:'IBM Plex Mono',monospace; color:var(--ink-3);">Medium</span></div>
+              <div style="font-size:11px; color:var(--ink-2); display:flex; justify-content:space-between;"><span>FTE available vs. budgeted gap</span><span style="font-family:'IBM Plex Mono',monospace; color:var(--ink-3);">Low</span></div>
+            </div>
+          </div>
+
+          <div style="background:var(--bg); border-radius:var(--radius-sm); padding:14px 16px;">
+            <div style="font-size:11px; font-weight:600; color:var(--ink); margin-bottom:8px;">Impact if Understaffed <span style="font-size:10px; color:var(--ink-3); font-weight:400;">(vertical axis · 45% of score)</span></div>
+            <div style="display:flex; flex-direction:column; gap:5px;">
+              <div style="font-size:11px; color:var(--ink-2); display:flex; justify-content:space-between;"><span>Single-provider facility — no internal backup</span><span style="font-family:'IBM Plex Mono',monospace; color:var(--ink-3);">High weight</span></div>
+              <div style="font-size:11px; color:var(--ink-2); display:flex; justify-content:space-between;"><span>Facility type — SNF, memory care, veterans</span><span style="font-family:'IBM Plex Mono',monospace; color:var(--ink-3);">High weight</span></div>
+              <div style="font-size:11px; color:var(--ink-2); display:flex; justify-content:space-between;"><span>Geographic isolation — no PRN within 50 miles</span><span style="font-family:'IBM Plex Mono',monospace; color:var(--ink-3);">High weight</span></div>
+              <div style="font-size:11px; color:var(--ink-2); display:flex; justify-content:space-between;"><span>Historical understaffing frequency</span><span style="font-family:'IBM Plex Mono',monospace; color:var(--ink-3);">Medium</span></div>
+              <div style="font-size:11px; color:var(--ink-2); display:flex; justify-content:space-between;"><span>Active provider count — smaller pool = higher risk</span><span style="font-family:'IBM Plex Mono',monospace; color:var(--ink-3);">Medium</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end page-wrap -->
+</div><!-- end view-overview -->
+
+<!-- VIEW: POD DETAIL -->
+<div class="view" id="view-pod">
+<div class="page-wrap">
+  <div class="back-btn" onclick="goTo('overview')">← Back to Pod Overview</div>
+  <div class="section-header">
+    <div>
+      <div class="section-title" id="pod-title">Southeast</div>
+      <div class="section-subtitle" id="pod-subtitle">RDO: Kaline Remillard · Facilities sorted by composite risk score</div>
+    </div>
+    <div class="risk-badge" id="pod-badge" style="font-size:12px; padding:5px 12px;">Critical</div>
+  </div>
+  <div class="ci-strip" id="pod-ci-strip">
+    <div class="ci-strip-label">INSIGHT</div>
+    <div class="ci-strip-text" id="pod-ci-text">Southeast has the smallest FTE buffer (0.9 FTE vs target) of any region.</div>
+  </div>
+  <div class="facility-cards-grid" id="pod-facility-list"></div>
+</div>
+</div>
+
+<!-- VIEW: FACILITY DETAIL -->
+<div class="view" id="view-facility">
+<div class="page-wrap">
+  <div class="back-btn" id="detail-back" onclick="goBackFromDetail()">← Back to Pod</div>
+
+  <div class="risk-score-card" id="detail-risk-card">
+    <div class="risk-score-top">
+      <div>
+        <div id="detail-fac-name" style="font-size:20px; font-weight:600; margin-bottom:4px;"></div>
+        <div id="detail-fac-sub" style="font-size:12px; opacity:0.6;"></div>
+        <div class="risk-score-tier" id="detail-tier"></div>
+        <div class="risk-score-num" id="detail-score"></div>
+      </div>
+      <div class="risk-score-rec" id="detail-action"></div>
+    </div>
+    <div class="risk-sub-scores">
+      <div class="risk-sub">
+        <div class="risk-sub-label">Coverage Vulnerability</div>
+        <div class="risk-sub-val" id="detail-vuln"></div>
+        <div class="risk-sub-weight">55% weight</div>
+      </div>
+      <div class="risk-sub">
+        <div class="risk-sub-label">Consequence of Understaffing</div>
+        <div class="risk-sub-val" id="detail-cons"></div>
+        <div class="risk-sub-weight">45% weight</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-grid">
+    <div class="detail-card">
+      <div class="metric-label">Active Providers</div>
+      <div class="metric-value" id="d-providers"></div>
+      <div class="metric-sub" id="d-providers-sub"></div>
+    </div>
+    <div class="detail-card">
+      <div class="metric-label">PTO This Week</div>
+      <div class="metric-value red" id="d-pto"></div>
+      <div class="metric-sub" id="d-pto-sub"></div>
+    </div>
+    <div class="detail-card">
+      <div class="metric-label">Target FTE</div>
+      <div class="metric-value" id="d-fte"></div>
+      <div class="metric-sub" id="d-fte-sub"></div>
+    </div>
+    <div class="detail-card">
+      <div class="metric-label">PRN Available ≤50mi</div>
+      <div class="metric-value" id="d-prn"></div>
+      <div class="metric-sub" id="d-prn-sub"></div>
+    </div>
+  </div>
+
+  <div id="detail-alert-strip" class="alert-strip" style="display:none;">
+    <div class="alert-dot"></div>
+    <span id="detail-alert-text"></span>
+  </div>
+
+  <div class="section-block">
+    <div class="block-title">PTO by Day <span class="block-subtitle">Current week — color threshold: 🔴 ≥2 absences, 🟡 1 absence</span></div>
+    <div class="pto-grid" id="detail-pto-grid"></div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+    <div class="section-block">
+      <div class="block-title">Provider Risk Factors</div>
+      <div id="detail-risk-factors"></div>
+    </div>
+    <div class="section-block">
+      <div class="block-title">PRN Availability by Radius</div>
+      <div class="prn-rings" id="detail-prn-rings"></div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="block-title">Provider PTO Pacing <span class="block-subtitle">Days used Q1 vs annualized pace vs annual budget</span></div>
+    <div id="detail-pacing"></div>
+  </div>
+
+</div>
+</div>
+
+<script>
+// ── STATE ──
+let currentPod = null;
+let sortCol = 6;
+let sortAsc = false;
+
+// ── FACILITY DATA ──
+const facilities = [
+  { id:'regency-troy', name:'Regency at Troy', region:'MI East', rdo:'Kara Palazzolo', pod:'mieast', vuln:92, cons:88, score:90, tier:'critical', trend:'up', driver:'No PRN <10mi', action:'Immediate RDO call. PRN outreach today. Escalate if unresolved in 24hrs.', providers:2, pto:4, fte:8, prnCount:79, shortNotice:11, cohort:'B', tenure:'<6mo', prnIn10:['SURESH, SANJULA','YANG, DONGMEI','MILLER, MELISSA','PATEL, ARPAN','ROMO, CLAUDIA'], prnIn25:['GATES, TIMOTHY','SQUIRES, JESSICA','OBEID, ABDULILAH','FERDOUS, TAHMINA','CORK, MELISSA'], prnIn50:['MCDANIEL, CAILIN','BUSHINSKI, SUSAN','AUMANN, CAITLIN','EVANS, KENISHA'], ptoDays:[0,2,1,1,0,0,0], pacing:[{name:'Provider A',used:7,pace:21,budget:40,out:true,cohort:'B',tenure:'<6mo'},{name:'Provider B',used:3,pace:9,budget:40,out:false,cohort:'AA',tenure:'1–2yr'}] },
+  { id:'tenn-veterans', name:'Tennessee Veterans Home — Murfreesboro', region:'Southeast', rdo:'Kaline Remillard', pod:'southeast', vuln:88, cons:85, score:87, tier:'critical', trend:'up', driver:'High short-notice PTO', action:'Immediate RDO call. PRN outreach today. Escalate if unresolved in 24hrs.', providers:2, pto:3, fte:6, prnCount:6, shortNotice:7, cohort:'C', tenure:'1–2yr', prnIn10:[], prnIn25:['ODURO, MAVIS','MORTON, NANCY','ROBERTSON, MEGHAN','WATSON MASON, JOCELYN'], prnIn50:['JACKSON, ERIC','STEWART, KADY'], ptoDays:[0,1,1,1,0,0,0], pacing:[{name:'Provider A',used:9,pace:27,budget:40,out:true,cohort:'C',tenure:'1–2yr'},{name:'Provider B',used:2,pace:6,budget:40,out:false,cohort:'AA',tenure:'3+yr'}] },
+  { id:'pinecrest', name:'Pinecrest Medical Care Facility', region:'MI West', rdo:'Heather DiCesare', pod:'miwest', vuln:95, cons:72, score:85, tier:'critical', trend:'stable', driver:'Single provider — max consequence', action:'Immediate RDO call. PRN outreach today. Escalate if unresolved in 24hrs.', providers:1, pto:1, fte:2, prnCount:2, shortNotice:3, cohort:'AA', tenure:'6–12mo', prnIn10:[], prnIn25:['BURKLUND, JULIE'], prnIn50:['HAYWARD, JONATHAN'], ptoDays:[0,0,1,0,0,0,0], pacing:[{name:'Provider A',used:8,pace:24,budget:40,out:true,cohort:'AA',tenure:'6–12mo'}] },
+  { id:'gallaway', name:'Gallaway Health and Rehab', region:'Southeast', rdo:'Kaline Remillard', pod:'southeast', vuln:82, cons:80, score:81, tier:'critical', trend:'up', driver:'No PRN ≤50mi', action:'Immediate RDO call. PRN outreach today. Escalate if unresolved in 24hrs.', providers:1, pto:1, fte:6, prnCount:0, shortNotice:9, cohort:'C', tenure:'<6mo', prnIn10:[], prnIn25:['FOSTER, CONSUELO','HALL, CEVETTE','VAUGHN, DOMINIQUE'], prnIn50:['JOHNSON, CLARA','JONES, ELIZABETH'], ptoDays:[0,1,0,0,0,0,0], pacing:[{name:'Provider A',used:11,pace:33,budget:40,out:true,cohort:'C',tenure:'<6mo'}] },
+  { id:'autumnwood', name:'Autumnwood of McBain', region:'MI West', rdo:'Heather DiCesare', pod:'miwest', vuln:88, cons:70, score:80, tier:'critical', trend:'up', driver:'Week PTO gap: 5 shifts', action:'Immediate RDO call. PRN outreach today.', providers:1, pto:1, fte:8, prnCount:8, shortNotice:4, cohort:'B', tenure:'6–12mo', prnIn10:[], prnIn25:['CHENG, DANIELLE','GUOAN, DEAN'], prnIn50:['BLADES, AMANDA','BEST, LINDSAY','SNIDER, SHANNON'], ptoDays:[1,1,0,1,1,1,0], pacing:[{name:'Provider A',used:6,pace:18,budget:40,out:true,cohort:'B',tenure:'6–12mo'}] },
+  { id:'coulterville', name:'Coulterville Rehab & Health Care Center', region:'Great Lakes', rdo:'Karlee McBride', pod:'greatlakes', vuln:78, cons:74, score:76, tier:'high', trend:'up', driver:'Short-notice PTO rate: 10 days YTD', action:'Address within 48hrs. Confirm PRN backup. Flag to VP if worsening.', providers:6, pto:2, fte:5, prnCount:6, shortNotice:10, cohort:'B', tenure:'<6mo', prnIn10:[], prnIn25:['DRINEN, ERIN'], prnIn50:['COLEMAN, SHARONDA','HIPSKIND, TIMOTHY','SCHNEIDER, JAMIE'], ptoDays:[0,1,1,0,0,0,0], pacing:[{name:'Provider A',used:10,pace:30,budget:40,out:true,cohort:'B',tenure:'<6mo'},{name:'Provider B',used:6,pace:18,budget:40,out:false,cohort:'AA',tenure:'1–2yr'},{name:'Provider C',used:2,pace:6,budget:40,out:false,cohort:'A',tenure:'3+yr'}] },
+  { id:'meadow-brook', name:'Meadow Brook Medical Care Facility', region:'MI West', rdo:'Heather DiCesare', pod:'miwest', vuln:76, cons:72, score:74, tier:'high', trend:'stable', driver:'Short-notice PTO: 9 days YTD', action:'Address within 48hrs. Confirm PRN backup. Flag to VP if worsening.', providers:13, pto:2, fte:12, prnCount:10, shortNotice:9, cohort:'B', tenure:'1–2yr', prnIn10:[], prnIn25:['GRABOWSKI, TIMOTHY','SNIDER, SHANNON','BEST, LINDSAY','BIRT, KAREN'], prnIn50:['FEIHEL, DENNIS','KAROLIONOK, ANNA','WORCESTER, TRACY'], ptoDays:[0,1,0,1,0,0,0], pacing:[{name:'Provider A',used:9,pace:27,budget:40,out:true,cohort:'B',tenure:'1–2yr'},{name:'Provider B',used:4,pace:12,budget:40,out:false,cohort:'AA',tenure:'2–3yr'}] },
+  { id:'grayling', name:'Grayling Nursing and Rehab', region:'MI West', rdo:'Heather DiCesare', pod:'miwest', vuln:72, cons:74, score:73, tier:'high', trend:'up', driver:'5-day PTO gap this week', action:'Address within 48hrs. Confirm PRN backup.', providers:1, pto:1, fte:10, prnCount:10, shortNotice:6, cohort:'AA', tenure:'6–12mo', prnIn10:[], prnIn25:['WORCESTER, TRACY','BIRT, KAREN','SNIDER, SHANNON'], prnIn50:['SPELLMAN, ROSE MARY','GRABOWSKI, TIMOTHY','BEST, LINDSAY'], ptoDays:[1,1,1,1,1,0,0], pacing:[{name:'Provider A',used:5,pace:15,budget:40,out:true,cohort:'AA',tenure:'6–12mo'}] },
+  { id:'laurels-bedford', name:'Laurels of Bedford', region:'MI West', rdo:'Heather DiCesare', pod:'miwest', vuln:74, cons:68, score:71, tier:'high', trend:'stable', driver:'4-day PTO gap; Cohort B providers', action:'Address within 48hrs. Confirm PRN backup.', providers:4, pto:2, fte:28, prnCount:28, shortNotice:5, cohort:'B', tenure:'1–2yr', prnIn10:['PAPENDICK, KEITH','JANAS, ANTHONY','DORSEY, JASMINE'], prnIn25:['PATEL, GOPI','FLICKINGER, CAROLINA','PRESTON, WHITNEY','MBANGWANA, BETTY'], prnIn50:['KURTZ-STENGER, GWENDOLYN','JOHNSON, BRYAN','HAHN, VICKI'], ptoDays:[0,1,1,0,1,1,0], pacing:[{name:'Provider A',used:8,pace:24,budget:40,out:true,cohort:'B',tenure:'1–2yr'},{name:'Provider B',used:3,pace:9,budget:40,out:false,cohort:'AA',tenure:'2–3yr'}] },
+  { id:'regency-fremont', name:'Regency at Fremont', region:'MI West', rdo:'Heather DiCesare', pod:'miwest', vuln:70, cons:62, score:66, tier:'high', trend:'up', driver:'5-day PTO gap; 3 providers absent', action:'Address within 48hrs. Confirm PRN backup.', providers:2, pto:3, fte:12, prnCount:12, shortNotice:4, cohort:'AA', tenure:'6–12mo', prnIn10:[], prnIn25:[], prnIn50:['WHITFORD, MICHELLE','HARRIS, KIM','SWEENEY, STEPHANIE','KUKLEWSKI, ANGELA','PASHAK, RACHEL'], ptoDays:[0,1,1,1,1,0,0], pacing:[{name:'Provider A',used:7,pace:21,budget:40,out:true,cohort:'AA',tenure:'6–12mo'},{name:'Provider B',used:4,pace:12,budget:40,out:false,cohort:'AA',tenure:'1–2yr'}] },
+  { id:'harbor-post', name:'Harbor Post Acute Care Center', region:'MI West', rdo:'Heather DiCesare', pod:'miwest', vuln:55, cons:58, score:56, tier:'elevated', trend:'stable', driver:'Low PRN within 10mi', action:'Monitor daily. Pre-schedule PRN if available.', providers:1, pto:0, fte:28, prnCount:28, shortNotice:2, cohort:'AA', tenure:'3+yr', prnIn10:['RUNOWSKI, ALEXANDER','ABUYA, DOMINIC','PASHAK, RACHEL','SWEENEY, STEPHANIE'], prnIn25:['HARRIS, KIM','NWANKWO, UCHEBIKE','KUKLEWSKI, ANGELA'], prnIn50:['BAILEY, MOLLY','FLICKINGER, CAROLINA','PATEL, GOPI'], ptoDays:[0,0,0,0,0,0,0], pacing:[{name:'Provider A',used:2,pace:6,budget:40,out:false,cohort:'AA',tenure:'3+yr'}] },
+  { id:'harmony-hall', name:'Harmony Hall Nursing and Rehabilitation', region:'Atlantic', rdo:'Julie Segars', pod:'atlantic', vuln:68, cons:60, score:64, tier:'elevated', trend:'up', driver:'Short-notice PTO: 10 days YTD', action:'Monitor daily. Pre-schedule PRN if available.', providers:1, pto:1, fte:9, prnCount:9, shortNotice:10, cohort:'B', tenure:'<6mo', prnIn10:[], prnIn25:['LANCASTER, ANGELA','CAPUTO, ARTHUR','BRATHWAITE, MICHELLE'], prnIn50:['EDOO, VENITA','WALKER, BETTY','TROWBRIDGE, KRISTIN'], ptoDays:[0,1,0,0,0,0,0], pacing:[{name:'Provider A',used:9,pace:27,budget:40,out:true,cohort:'B',tenure:'<6mo'}] },
+  { id:'novi-lakes', name:'Novi Lakes Health Campus — HC', region:'MI East', rdo:'Ron Moore', pod:'mieast', vuln:60, cons:65, score:62, tier:'elevated', trend:'stable', driver:'Short-notice PTO: 8 days YTD', action:'Monitor daily. Pre-schedule PRN.', providers:1, pto:1, fte:77, prnCount:77, shortNotice:8, cohort:'AA', tenure:'1–2yr', prnIn10:['WHITE, MAKEBA','MANDHARE, ARCHANA','MALEK, BILAL','MILLS, TIA'], prnIn25:['CHIZICK, BRITTANY','YEON, EUN JU','YACOUB, LISA','MUBAREZ, FARES'], prnIn50:['MILLS, TAMARA','OLIVERIO, KELLY','PETERS, LADONNA'], ptoDays:[0,0,0,1,0,0,0], pacing:[{name:'Provider A',used:5,pace:15,budget:40,out:true,cohort:'AA',tenure:'1–2yr'}] },
+  { id:'columbus-rehab', name:'Columbus Health and Rehab', region:'Great Lakes', rdo:'Karlee McBride', pod:'greatlakes', vuln:58, cons:55, score:57, tier:'elevated', trend:'stable', driver:'Short-notice PTO: 7 days YTD', action:'Monitor daily. Pre-schedule PRN.', providers:3, pto:1, fte:5, prnCount:3, shortNotice:7, cohort:'B', tenure:'1–2yr', prnIn10:[], prnIn25:['FONT, JAVIER'], prnIn50:['CYRULIK, TONYA','KLOTZ, BRIANNA'], ptoDays:[0,1,0,0,0,0,0], pacing:[{name:'Provider A',used:4,pace:12,budget:40,out:false,cohort:'B',tenure:'1–2yr'}] },
+  { id:'carnegie-rehab', name:'Carnegie Rehabilitation and Healthcare', region:'Heartland', rdo:'Levi Davis', pod:'heartland', vuln:45, cons:50, score:47, tier:'lowrisk', trend:'stable', driver:'Normal PTO pacing', action:'Quarterly review. No immediate action.', providers:23, pto:1, fte:22, prnCount:22, shortNotice:2, cohort:'AA', tenure:'2–3yr', prnIn10:['KOWA, ABIE','SHEIKH, SOPHIA','KERMANI, ATTY'], prnIn25:['NGUYEN, THAI','OKWOMI, LUCYANNE','MUCHIRI, SAMUEL'], prnIn50:['MARX, JAMES','PORTER, AUSTYN','BURNS, LESCHANDA'], ptoDays:[0,1,0,0,0,0,0], pacing:[{name:'Provider A',used:3,pace:9,budget:40,out:false,cohort:'AA',tenure:'2–3yr'}] },
+  { id:'briar-hill', name:'Briar Hill Health Campus — AL', region:'Steel Belt', rdo:'Carissa Morton', pod:'steelbelt', vuln:52, cons:48, score:50, tier:'elevated', trend:'down', driver:'Improving PRN coverage', action:'Monitor daily. Review in weekly standup.', providers:12, pto:1, fte:12, prnCount:12, shortNotice:3, cohort:'AA', tenure:'2–3yr', prnIn10:['JIN, YING','MORSE, THOMAS','MBOWA, GRACIOUS','MITCHELL II, ANDREW'], prnIn25:['SLAYBAUGH, RANDALL','YU, JING','ENGEL, JEREMY'], prnIn50:['KAUR, SANDEEP','NASSAR, HAZEM'], ptoDays:[0,0,1,0,0,0,0], pacing:[{name:'Provider A',used:2,pace:6,budget:40,out:false,cohort:'AA',tenure:'2–3yr'}] },
+];
+
+// ── NAVIGATION ──
+function goTo(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  updateBreadcrumb(view);
+}
+
+function updateBreadcrumb(view) {
+  const bc = document.getElementById('breadcrumb');
+  if (view === 'overview') {
+    bc.innerHTML = '<span class="crumb active">Pod Overview</span>';
+  } else if (view === 'pod') {
+    const pod = POD_DATA[currentPod];
+    bc.innerHTML = `<span class="crumb" onclick="goTo('overview')">Pod Overview</span><span class="sep">›</span><span class="crumb active">${pod.name}</span>`;
+  } else if (view === 'facility') {
+    const pod = POD_DATA[currentPod];
+    bc.innerHTML = `<span class="crumb" onclick="goTo('overview')">Pod Overview</span><span class="sep">›</span><span class="crumb" onclick="goTo('pod')">${pod.name}</span><span class="sep">›</span><span class="crumb active" id="bc-fac">Facility</span>`;
+  }
+}
+
+const POD_DATA = {
+  southeast: { name:'Southeast', rdo:'Kaline Remillard', badge:'Critical', badgeClass:'badge-critical', ciText:'Smallest FTE buffer in the system — only 0.9 FTE vs target. 7 providers on PTO this week. Tennessee Veterans Home and Gallaway have no PRN coverage within 50mi.' },
+  miwest: { name:'MI West', rdo:'Heather DiCesare', badge:'High Risk', badgeClass:'badge-high', ciText:'Grayling and Pinecrest are single-provider facilities — any unplanned absence creates a 100% coverage gap with no on-site backup. Laurels of Bedford and Meadow Brook are top short-notice outliers.' },
+  mieast: { name:'MI East', rdo:'Kara Palazzolo', badge:'Elevated', badgeClass:'badge-elevated', ciText:'Regency at Troy is the #1 short-notice PTO outlier nationally with 11 days YTD. Large PRN pool (79 within 50mi) provides meaningful buffer for most facilities.' },
+  greatlakes: { name:'Great Lakes', rdo:'Christina O\'Brien', badge:'Elevated', badgeClass:'badge-elevated', ciText:'Coulterville is the #4 short-notice outlier nationally with 10 YTD days. FTE buffer of 4.7 is healthy, but several Brickyard facilities have limited PRN supply within 10mi.' },
+  steelbelt: { name:'Steel Belt', rdo:'Carissa Morton', badge:'Watch', badgeClass:'badge-watch', ciText:'FTE buffer of 3.6 is adequate at current absence levels. Monitor Otterbein and The Lakes campus facilities — shared PRN pool creates concentration risk if multiple sites are hit simultaneously.' },
+  atlantic: { name:'Atlantic', rdo:'Julie Segars', badge:'Stable', badgeClass:'badge-stable', ciText:'Best FTE buffer in the system at 8.7 vs target. Harmony Hall is the primary watch facility with 10 short-notice days YTD. New Hampshire facilities have limited PRN supply.' },
+  heartland: { name:'Heartland', rdo:'Levi Davis / Ron Moore', badge:'Watch', badgeClass:'badge-watch', ciText:'PRN geography is favorable — large Kansas and Missouri PRN network. Carnegie and Mission Chateau campuses provide good redundancy. Provider pool is smaller than other regions — watch for clustering.' },
+  frontier: { name:'Frontier', rdo:'Karlee McBride', badge:'High Risk', badgeClass:'badge-high', ciText:'Only region running a negative FTE gap vs target. Montana and Arizona facilities are geographically isolated with near-zero PRN availability within 50mi. Any absence is an immediate escalation.' },
+};
+
+function goToPod(pod) {
+  currentPod = pod;
+  const data = POD_DATA[pod];
+  document.getElementById('pod-title').textContent = data.rdo;
+  document.getElementById('pod-subtitle').textContent = `${data.name} · Facilities sorted by composite risk score`;
+  const badge = document.getElementById('pod-badge');
+  badge.textContent = data.badge;
+  badge.className = 'risk-badge ' + data.badgeClass;
+  document.getElementById('pod-ci-text').textContent = data.ciText;
+
+  // Build facility cards
+  const podFacs = facilities.filter(f => f.pod === pod).sort((a,b) => b.score - a.score);
+  const container = document.getElementById('pod-facility-list');
+  container.innerHTML = '';
+  podFacs.forEach(f => {
+    const tClass = tierClass(f.tier);
+    const tLabel = tierLabel(f.tier);
+    const trendIcon = f.trend === 'up' ? '▲' : f.trend === 'down' ? '▼' : '—';
+    const trendClass = f.trend === 'up' ? 'trend-up' : f.trend === 'down' ? 'trend-down' : 'trend-stable';
+    const noAlert = f.prnIn10.length === 0 ? '<span style="font-size:10px;background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);padding:2px 6px;border-radius:3px;margin-left:8px;">NO PRN &lt;10mi</span>' : '';
+    container.innerHTML += `
+      <div class="facility-card" onclick="goToFacility('${f.id}')">
+        <div>
+          <div class="facility-card-name">${f.name} ${noAlert}</div>
+          <div class="facility-card-sub">${f.region} · ${f.rdo}</div>
+        </div>
+        <div class="fac-stat">
+          <div class="fac-stat-val">${f.providers}</div>
+          <div class="fac-stat-lbl">Providers</div>
+        </div>
+        <div class="fac-stat">
+          <div class="fac-stat-val ${f.pto >= 2 ? 'red' : f.pto === 1 ? 'amber' : ''}">${f.pto}</div>
+          <div class="fac-stat-lbl">PTO</div>
+        </div>
+        <div class="fac-stat">
+          <div class="fac-stat-val">${f.prnCount}</div>
+          <div class="fac-stat-lbl">PRN ≤50mi</div>
+        </div>
+        <div>
+          <div class="score-bar-wrap">
+            <div class="score-bar-track"><div class="score-bar-fill ${tClass}" style="width:${f.score}%"></div></div>
+            <span class="score-val ${tClass}">${f.score}</span>
+          </div>
+          <div style="margin-top:4px;"><span class="risk-badge ${tierBadge(f.tier)}" style="font-size:9px;padding:2px 6px;">${tLabel}</span></div>
+        </div>
+        <div class="${trendClass}" style="font-size:14px;font-weight:600;">${trendIcon}</div>
+      </div>`;
+  });
+
+  goTo('pod');
+}
+
+function goToFacility(id) {
+  const f = facilities.find(x => x.id === id);
+  if (!f) return;
+
+  document.getElementById('detail-fac-name').textContent = f.name;
+  document.getElementById('detail-fac-sub').textContent = `${f.region} · ${f.rdo}`;
+  document.getElementById('detail-tier').textContent = tierLabel(f.tier) + ' — Tier ' + tierNum(f.tier);
+  document.getElementById('detail-score').textContent = f.score + '/100';
+  document.getElementById('detail-vuln').textContent = f.vuln;
+  document.getElementById('detail-cons').textContent = f.cons;
+  document.getElementById('detail-action').textContent = f.action;
+  document.getElementById('d-providers').textContent = f.providers;
+  document.getElementById('d-providers-sub').textContent = f.providers === 1 ? '⚠ Single-provider facility' : 'Active this week';
+  document.getElementById('d-pto').textContent = f.pto;
+  document.getElementById('d-pto-sub').textContent = `${f.shortNotice} short-notice days YTD`;
+  document.getElementById('d-fte').textContent = f.fte;
+  document.getElementById('d-fte-sub').textContent = 'Target FTE';
+  document.getElementById('d-prn').textContent = f.prnCount;
+  document.getElementById('d-prn-sub').textContent = `${f.prnIn10.length} within 10mi`;
+
+  // Alert
+  const alertStrip = document.getElementById('detail-alert-strip');
+  if (f.prnIn10.length === 0) {
+    alertStrip.style.display = 'flex';
+    document.getElementById('detail-alert-text').textContent = 'No PRN providers available within 10mi — immediate outreach required before next absence event.';
+  } else {
+    alertStrip.style.display = 'none';
+  }
+
+  // PTO grid
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const ptoGrid = document.getElementById('detail-pto-grid');
+  ptoGrid.innerHTML = '';
+  f.ptoDays.forEach((count, i) => {
+    const cls = count >= 2 ? 'red' : count === 1 ? 'amber' : 'ok';
+    const lbl = count >= 2 ? 'Critical' : count === 1 ? 'Absent' : 'Clear';
+    ptoGrid.innerHTML += `<div class="pto-day ${cls}">
+      <div class="pto-day-name">${days[i]}</div>
+      <div class="pto-day-count">${count}</div>
+      <div class="pto-day-label">${lbl}</div>
+    </div>`;
+  });
+
+  // Risk factors
+  const rfContainer = document.getElementById('detail-risk-factors');
+  const cohortRisk = cohortRiskLabel(f.cohort);
+  const tenureRisk = tenureRiskLabel(f.tenure);
+  rfContainer.innerHTML = `
+    <div style="margin-bottom:10px;">
+      <div style="font-size:11px;color:var(--ink-3);margin-bottom:6px;">Cohort (VPS-based · 20% weight)</div>
+      <div class="flag-row"><span class="flag-pill cohort-${f.cohort.toLowerCase()}">${f.cohort} — ${cohortDesc(f.cohort)}</span></div>
+    </div>
+    <div style="margin-bottom:10px;">
+      <div style="font-size:11px;color:var(--ink-3);margin-bottom:6px;">Tenure Band (25% weight · short-notice rate)</div>
+      <div class="flag-row"><span class="flag-pill ${tenureRisk.cls}">${f.tenure} — ${tenureRisk.rate} short-notice rate</span></div>
+    </div>
+    <div>
+      <div style="font-size:11px;color:var(--ink-3);margin-bottom:6px;">Day-of-Week Risk (15% weight)</div>
+      <div class="flag-row">
+        <span class="flag-pill dow-mon">Mon — 43.8% short-notice</span>
+        <span class="flag-pill dow-fri">Fri — 30.0% short-notice</span>
+      </div>
+    </div>`;
+
+  // PRN rings
+  const prnRings = document.getElementById('detail-prn-rings');
+  prnRings.innerHTML = '';
+  const rings = [
+    { label:'Within 10mi', names: f.prnIn10 },
+    { label:'10 – 25mi', names: f.prnIn25 },
+    { label:'25 – 50mi', names: f.prnIn50 },
+  ];
+  rings.forEach(r => {
+    const isEmpty = r.names.length === 0;
+    const shown = r.names.slice(0,4);
+    const more = r.names.length - 4;
+    prnRings.innerHTML += `<div class="prn-ring ${isEmpty && r.label === 'Within 10mi' ? 'danger' : ''}">
+      <div class="prn-ring-header">
+        <div class="prn-ring-label">${r.label}</div>
+        <div class="prn-ring-count">${r.names.length} PRN</div>
+      </div>
+      ${isEmpty ? `<div class="prn-no-coverage"><div class="prn-dot"></div>No PRN available</div>` : 
+        `<div class="prn-names">${shown.map(n => `<span class="prn-name">${n.split(',').map(p=>p.trim().charAt(0)+p.trim().slice(1).toLowerCase()).join(', ')}</span>`).join('')}
+        ${more > 0 ? `<div class="prn-more">+${more} more</div>` : ''}</div>`}
+    </div>`;
+  });
+
+  // Pacing
+  const pacingContainer = document.getElementById('detail-pacing');
+  let pacingHTML = `<div class="pacing-row header">
+    <div>Provider</div><div>Q1 Used</div><div>Ann. Pace</div><div>Budget</div><div>Pacing</div><div>Status</div>
+  </div>`;
+  f.pacing.forEach(p => {
+    const pct = Math.min((p.pace / p.budget) * 100, 120);
+    const barCls = pct < 65 ? 'green' : pct < 85 ? 'amber' : pct < 110 ? 'orange' : 'red';
+    pacingHTML += `<div class="pacing-row">
+      <div class="pacing-name ${p.out ? 'out' : ''}">${p.name}</div>
+      <div class="pacing-num">${p.used}d</div>
+      <div class="pacing-num">${p.pace}d</div>
+      <div class="pacing-num">${p.budget}d</div>
+      <div><div class="pacing-bar-track"><div class="pacing-bar-fill ${barCls}" style="width:${Math.min(pct,100)}%"></div></div></div>
+      <div class="pacing-pct ${barCls}">${Math.round(pct)}%</div>
+    </div>`;
+  });
+  pacingContainer.innerHTML = pacingHTML;
+
+  goTo('facility');
+  const bcFac = document.getElementById('bc-fac');
+  if (bcFac) bcFac.textContent = f.name.length > 30 ? f.name.slice(0,30) + '…' : f.name;
+}
+
+function goBackFromDetail() {
+  goTo('pod');
+}
+
+// ── TABS ──
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    t.classList.toggle('active', ['pods','table','matrix'][i] === tab);
+  });
+  document.getElementById('tab-pods').style.display = tab === 'pods' ? 'grid' : 'none';
+  document.getElementById('tab-table').style.display = tab === 'table' ? 'block' : 'none';
+  document.getElementById('tab-matrix').style.display = tab === 'matrix' ? 'block' : 'none';
+  if (tab === 'table') buildTable(facilities);
+}
+
+// ── RISK TABLE ──
+function buildTable(data) {
+  const tbody = document.getElementById('risk-table-body');
+  const sorted = [...data].sort((a,b) => b.score - a.score);
+  tbody.innerHTML = sorted.map((f, i) => {
+    const tClass = tierClass(f.tier);
+    const trendIcon = f.trend === 'up' ? '▲' : f.trend === 'down' ? '▼' : '—';
+    const trendClass = f.trend === 'up' ? 'trend-up' : f.trend === 'down' ? 'trend-down' : 'trend-stable';
+    const driverCls = f.tier === 'critical' || f.tier === 'high' ? 'red' : '';
+    return `<tr onclick="goToFacility('${f.id}')">
+      <td><span class="rank-num">#${i+1}</span></td>
+      <td><div class="fac-name">${f.name}</div><div class="fac-rdo">${f.rdo}</div></td>
+      <td>${f.region}</td>
+      <td style="font-size:12px;">${f.rdo}</td>
+      <td><div class="score-bar-wrap"><div class="score-bar-track"><div class="score-bar-fill ${tClass}" style="width:${f.vuln}%"></div></div><span class="score-val ${tClass}" style="font-size:11px;">${f.vuln}</span></div></td>
+      <td><div class="score-bar-wrap"><div class="score-bar-track"><div class="score-bar-fill ${tClass}" style="width:${f.cons}%"></div></div><span class="score-val ${tClass}" style="font-size:11px;">${f.cons}</span></div></td>
+      <td><div class="score-bar-wrap"><div class="score-bar-track"><div class="score-bar-fill ${tClass}" style="width:${f.score}%"></div></div><span class="score-val ${tClass}">${f.score}</span></div></td>
+      <td><span class="risk-badge ${tierBadge(f.tier)}" style="font-size:10px;">${tierLabel(f.tier)}</span></td>
+      <td><span class="driver-tag ${driverCls}">${f.driver}</span></td>
+      <td><div class="action-text">${f.action.split('.')[0]}.</div></td>
+      <td><span class="${trendClass}" style="font-weight:600;">${trendIcon}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function filterTable() {
+  const rdo = document.getElementById('filter-rdo').value.toLowerCase();
+  const tier = document.getElementById('filter-tier').value;
+  const region = document.getElementById('filter-region').value;
+  const search = document.getElementById('filter-search').value.toLowerCase();
+  const filtered = facilities.filter(f => {
+    if (rdo && !f.rdo.toLowerCase().includes(rdo)) return false;
+    if (tier && tierLabel(f.tier) !== tier.split(' — ')[1]) return false;
+    if (region && f.region !== region) return false;
+    if (search && !f.name.toLowerCase().includes(search)) return false;
+    return true;
+  });
+  buildTable(filtered);
+}
+
+function resetFilters() {
+  ['filter-rdo','filter-tier','filter-region'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('filter-search').value = '';
+  buildTable(facilities);
+}
+
+let sortDir = {};
+function sortTable(col) {
+  sortDir[col] = !sortDir[col];
+  const tbody = document.getElementById('risk-table-body');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const vals = [0,1,2,3,4,5,6];
+  rows.sort((a,b) => {
+    const aVal = a.cells[col].innerText.trim();
+    const bVal = b.cells[col].innerText.trim();
+    const aNum = parseFloat(aVal);
+    const bNum = parseFloat(bVal);
+    if (!isNaN(aNum) && !isNaN(bNum)) return sortDir[col] ? aNum - bNum : bNum - aNum;
+    return sortDir[col] ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+// ── HELPERS ──
+function tierClass(t) {
+  return { critical:'critical', high:'high', elevated:'elevated', lowrisk:'lowrisk', stable:'stable' }[t] || 'stable';
+}
+function tierLabel(t) {
+  return { critical:'Critical', high:'High Risk', elevated:'Elevated', lowrisk:'Low Risk', stable:'Stable' }[t] || 'Stable';
+}
+function tierNum(t) {
+  return { critical:'1', high:'2', elevated:'3', lowrisk:'4', stable:'5' }[t] || '5';
+}
+function tierBadge(t) {
+  return { critical:'badge-critical', high:'badge-high', elevated:'badge-elevated', lowrisk:'badge-watch', stable:'badge-stable' }[t] || 'badge-stable';
+}
+function cohortDesc(c) {
+  const d = {A:'20+ VPS — Low concern', AA:'15–20 VPS — Low concern', B:'9–14 VPS — Monitor', C:'<9 VPS — High concern, double risk', D:'New hire Feb–Apr — Expected adjustment', X:'Resignation — Departing, flag coverage', Z:'Special — Review with RDO'};
+  return d[c] || c;
+}
+function cohortRiskLabel(c) { return { A:'cohort-a', AA:'cohort-aa', B:'cohort-b', C:'cohort-c', D:'cohort-d', X:'cohort-x', Z:'cohort-a' }[c] || 'cohort-aa'; }
+function tenureRiskLabel(t) {
+  const m = {
+    '<6mo': {cls:'tenure-high', rate:'47.1%'},
+    '6–12mo': {cls:'tenure-elevated', rate:'39.6%'},
+    '1–2yr': {cls:'tenure-elevated', rate:'35.9%'},
+    '2–3yr': {cls:'tenure-elevated', rate:'34.6%'},
+    '3+yr': {cls:'tenure-low', rate:'19.0%'},
+  };
+  return m[t] || {cls:'tenure-elevated', rate:'~35%'};
+}
+
+// Matrix hover tooltips
+document.querySelectorAll('.matrix-dot').forEach(dot => {
+  dot.addEventListener('mouseenter', e => {
+    const tooltip = document.getElementById('tooltip');
+    tooltip.textContent = dot.title;
+    tooltip.style.display = 'block';
+    tooltip.style.left = (e.pageX + 10) + 'px';
+    tooltip.style.top = (e.pageY - 24) + 'px';
+  });
+  dot.addEventListener('mouseleave', () => {
+    document.getElementById('tooltip').style.display = 'none';
+  });
+});
+</script>
+</body>
+</html>
